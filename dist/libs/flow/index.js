@@ -120,6 +120,8 @@ const extractRequest = (filter) => (inputFlow) => {
 exports.extractRequest = extractRequest;
 const typeEqual = (a, b) => {
     if (typeof a === "object" && !!a && typeof b === "object" && !!b) {
+        if (Array.isArray(a) && Array.isArray(b))
+            return true;
         const aKeys = Object.keys(a);
         const bKeys = Object.keys(b);
         if (aKeys.length !== bKeys.length)
