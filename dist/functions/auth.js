@@ -21,7 +21,6 @@ exports.authorizeUser = (0, flow_1.setContext)((f) => {
         return (0, flow_1.isErrorReport)(user) ? (0, flow_1.raiseScenarioErrorWithReport)(user)(f) : user;
     }
     catch (e) {
-        console.log(e);
         return (0, flow_1.raiseScenarioError)(500, "토큰이 유효하지 않습니다")(f);
     }
 })("authedUser");

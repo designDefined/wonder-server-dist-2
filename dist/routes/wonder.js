@@ -34,16 +34,23 @@ router.get("/recent", (0, express_2.default)((0, flow_1.setData)(() => (0, mongo
         ? null
         : (0, wonder_1.toWonderCard)(wonder, (0, creator_1.toCreatorInWonderCard)(creator));
 })), (0, flow_1.setData)((f) => (0, utility_1.deleteNull)(f.data))));
+router.get("/all", (0, express_2.default)((0, flow_1.setData)(() => (0, mongodb_1.dbFind)("wonder")()((0, connect_1.default)())), (0, flow_1.mapData)((wonder) => __awaiter(void 0, void 0, void 0, function* () {
+    const creator = yield (0, mongodb_1.dbFindOne)("creator")({
+        _id: wonder.creator,
+    })((0, connect_1.default)());
+    return (0, flow_1.isErrorReport)(creator)
+        ? null
+        : (0, wonder_1.toWonderSearchCard)(wonder, (0, creator_1.toCreatorInWonderCard)(creator));
+})), (0, flow_1.setData)((f) => (0, utility_1.deleteNull)(f.data))));
 router.get("/:wonderId", (0, express_2.default)((0, flow_1.extractRequest)({
     params: ["wonderId"],
     query: [],
     headers: auth_1.emptyHeader,
-}), flow_1.promptFlow, auth_1.authorizeUserLenient, (0, flow_1.parseContextToInt)("wonderId"), (0, flow_1.setData)((f) => (0, mongodb_1.dbFindOne)("wonder")({ id: f.context.wonderId })((0, connect_1.default)())), (0, flow_1.setData)(({ context, data }) => __awaiter(void 0, void 0, void 0, function* () {
+}), auth_1.authorizeUserLenient, (0, flow_1.parseContextToInt)("wonderId"), (0, flow_1.setData)((f) => (0, mongodb_1.dbFindOne)("wonder")({ id: f.context.wonderId })((0, connect_1.default)())), (0, flow_1.setData)(({ context, data }) => __awaiter(void 0, void 0, void 0, function* () {
     const me = context.authedUser;
     const creator = yield (0, mongodb_1.dbFindOne)("creator")({
         _id: data.creator,
     })((0, connect_1.default)());
-    console.log(me !== "no_user" && data.likedUsers.includes(me.id));
     return (0, flow_1.isErrorReport)(creator)
         ? creator
         : (0, wonder_1.toWonderDetail)(data, (0, creator_1.toCreatorInWonderDetail)(creator), me !== "no_user" && data.likedUsers.includes(me.id), false);
