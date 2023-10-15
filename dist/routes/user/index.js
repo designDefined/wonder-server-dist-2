@@ -12,22 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.router = void 0;
 const express_1 = require("express");
-const express_2 = __importDefault(require("../libs/flow/express"));
-const flow_1 = require("../libs/flow");
-const mongodb_1 = require("../libs/flow/mongodb");
-const connect_1 = __importDefault(require("../db/connect"));
+const express_2 = __importDefault(require("../../libs/flow/express"));
+const flow_1 = require("../../libs/flow");
+const mongodb_1 = require("../../libs/flow/mongodb");
+const connect_1 = __importDefault(require("../../db/connect"));
 const jsonwebtoken_1 = require("jsonwebtoken");
-const user_1 = require("../functions/user");
-const auth_1 = require("../functions/auth");
-const creator_1 = require("../functions/creator");
-const reservation_1 = require("../functions/reservation");
-const wonder_1 = require("../functions/wonder");
-const utility_1 = require("../functions/utility");
-const token_1 = require("../functions/auth/token");
-const mongodb_2 = require("mongodb");
-exports.router = (0, express_1.Router)();
+const user_1 = require("../../functions/user");
+const auth_1 = require("../../functions/auth");
+const creator_1 = require("../../functions/creator");
+const reservation_1 = require("../../functions/reservation");
+const wonder_1 = require("../../functions/wonder");
+const utility_1 = require("../../functions/utility");
+const token_1 = require("../../functions/auth/token");
+const router = (0, express_1.Router)();
 // router.post(
 //   "/login",
 //   defineScenario(
@@ -38,47 +36,7 @@ exports.router = (0, express_1.Router)();
 //     cutData("_id"),
 //   ),
 // );
-exports.router.get("/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        // check db health
-        const database = (0, connect_1.default)();
-        if (!database)
-            throw new Error("DB");
-        // parse token
-        const token = req.headers.authorization;
-        if (!token)
-            throw new Error("token is required");
-        // verify token
-        const internalId = (0, token_1.verifyToken)(req.headers.authorization)
-            ._id;
-        if (!internalId)
-            throw new Error("internalId is required");
-        // get user
-        const user = yield database
-            .collection("user")
-            .findOne({ _id: new mongodb_2.ObjectId(internalId) });
-        if (!user)
-            throw new Error("user not found");
-        // parse creators
-        const creators = yield database
-            .collection("creator")
-            .find({ id: { $in: user.ownedCreators } })
-            .toArray();
-        // return data
-        res.status(200).json({
-            id: user.id,
-            name: user.name,
-            nickname: user.nickname,
-            email: user.email,
-            profileImage: user.profileImage,
-            ownedCreators: creators,
-        });
-    }
-    catch (e) {
-        res.status(500).json({ error: e });
-    }
-}));
-exports.router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //check db
         const database = (0, connect_1.default)();
@@ -195,7 +153,7 @@ router.post(
   ),
 );
 */
-exports.router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // check db health
         const database = (0, connect_1.default)();
@@ -236,24 +194,24 @@ exports.router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0,
         res.status(500).json({ error: e });
     }
 }));
-exports.router.post("/autoLogin", (0, express_2.default)((0, flow_1.extractRequest)({
+router.post("/autoLogin", (0, express_2.default)((0, flow_1.extractRequest)({
     headers: auth_1.authedHeader,
     params: [],
     query: [],
 }), auth_1.authorizeUser, (0, flow_1.setData)((f) => (0, user_1.toUserLoggedIn)(f.context.authedUser, f.context.authorization))));
-exports.router.get("/ownedCreator", (0, express_2.default)((0, flow_1.extractRequest)({
+router.get("/ownedCreator", (0, express_2.default)((0, flow_1.extractRequest)({
     headers: auth_1.authedHeader,
     params: [],
     query: [],
 }), auth_1.authorizeUser, (0, flow_1.setData)((f) => (0, mongodb_1.dbFind)("creator")({
     id: { $in: f.context.authedUser.ownedCreators },
 })((0, connect_1.default)())), (0, flow_1.mapData)(creator_1.toOwnedCreator)));
-exports.router.get("/myDetail", (0, express_2.default)((0, flow_1.extractRequest)({
+router.get("/myDetail", (0, express_2.default)((0, flow_1.extractRequest)({
     headers: auth_1.authedHeader,
     params: [],
     query: [],
 }), auth_1.authorizeUser, (0, flow_1.setData)((f) => (0, mongodb_1.dbFindOne)("user")({ _id: f.context.authedUser._id })((0, connect_1.default)())), (0, flow_1.setData)(({ data }) => (0, user_1.toUserWithEmail)(data))));
-exports.router.get("/myWonderSummary", (0, express_2.default)((0, flow_1.extractRequest)({
+router.get("/myWonderSummary", (0, express_2.default)((0, flow_1.extractRequest)({
     headers: auth_1.authedHeader,
     params: [],
     query: [],
@@ -287,14 +245,14 @@ exports.router.get("/myWonderSummary", (0, express_2.default)((0, flow_1.extract
     }
     return data;
 }))));
-exports.router.get("/liked", (0, express_2.default)((0, flow_1.extractRequest)({
+router.get("/liked", (0, express_2.default)((0, flow_1.extractRequest)({
     headers: auth_1.authedHeader,
     params: [],
     query: [],
 }), auth_1.authorizeUser, (0, flow_1.setData)((f) => (0, mongodb_1.dbFind)("wonder")({
     id: { $in: f.context.authedUser.likedWonders },
 })((0, connect_1.default)())), (0, flow_1.mapData)(wonder_1.toWonderSummaryTitleOnly)));
-exports.router.get("/reserved", (0, express_2.default)((0, flow_1.extractRequest)({
+router.get("/reserved", (0, express_2.default)((0, flow_1.extractRequest)({
     headers: auth_1.authedHeader,
     params: [],
     query: [],
@@ -306,7 +264,7 @@ exports.router.get("/reserved", (0, express_2.default)((0, flow_1.extractRequest
         return null;
     return (0, wonder_1.toWonderSummaryReservation)(wonder, data.time);
 })), (0, flow_1.setData)((f) => (0, utility_1.deleteNull)(f.data))));
-exports.router.get("/ticketBook", (0, express_2.default)((0, flow_1.extractRequest)({
+router.get("/ticketBook", (0, express_2.default)((0, flow_1.extractRequest)({
     headers: auth_1.authedHeader,
     params: [],
     query: [],
@@ -353,4 +311,4 @@ router.get(
   ),
 );
 */
-exports.default = exports.router;
+exports.default = router;

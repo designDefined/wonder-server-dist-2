@@ -39,6 +39,8 @@ const flow_1 = require("./libs/flow");
 const mongodb_1 = require("./libs/flow/mongodb");
 const uniqueId_1 = require("./functions/uniqueId");
 const auth_1 = require("./functions/auth");
+const express_query_parser_1 = require("express-query-parser");
+const me_1 = __importDefault(require("./routes/user/me"));
 /*** basics ***/
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -47,6 +49,12 @@ const port = process.env.PORT;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use((0, express_query_parser_1.queryParser)({
+    parseNull: true,
+    parseUndefined: true,
+    parseBoolean: true,
+    parseNumber: true,
+}));
 app.disable("etag");
 /*** connect DB ***/
 (0, connect_1.connectDB)()
@@ -57,6 +65,7 @@ app.disable("etag");
 /*** routes ***/
 app.use("/", index_1.default);
 app.use("/user", user_1.default);
+app.use("/user/me", me_1.default);
 app.use("/wonder", wonder_1.default);
 app.use("/creator", creator_1.default);
 app.get("/newScenario/:wonder_id", (0, express_2.default)((0, flow_1.extractRequest)({

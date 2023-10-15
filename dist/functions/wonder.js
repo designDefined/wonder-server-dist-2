@@ -1,13 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.prepareNewWonder = exports.prepareWonderTag = exports.toWonderSummaryReservation = exports.toWonderSummaryTitleOnly = exports.toWonderDetail = exports.toWonderSearchCard = exports.toWonderCard = void 0;
-const toWonderCard = (wonder, creator) => ({
+exports.prepareNewWonder = exports.prepareWonderTag = exports.toWonderSummaryReservation = exports.toWonderSummaryTitleOnly = exports.toWonderDetail = exports.toWonderSearchCard = exports.toWonderCardOnlyThumbnail = exports.toWonderCard = void 0;
+const toWonderCard = (wonder) => ({
     id: wonder.id,
     title: wonder.title,
+    tags: wonder.tags,
     thumbnail: wonder.thumbnail,
-    creator,
+    schedule: wonder.schedule,
 });
 exports.toWonderCard = toWonderCard;
+const toWonderCardOnlyThumbnail = (wonder) => ({
+    id: wonder.id,
+    thumbnail: wonder.thumbnail,
+});
+exports.toWonderCardOnlyThumbnail = toWonderCardOnlyThumbnail;
 const toWonderSearchCard = (wonder, creator) => ({
     id: wonder.id,
     title: wonder.title,
