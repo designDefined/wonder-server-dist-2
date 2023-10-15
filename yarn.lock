@@ -2533,6 +2533,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.10":
+  version: 1.11.10
+  resolution: "dayjs@npm:1.11.10"
+  checksum: a6b5a3813b8884f5cd557e2e6b7fa569f4c5d0c97aca9558e38534af4f2d60daafd3ff8c2000fed3435cfcec9e805bcebd99f90130c6d1c5ef524084ced588c4
+  languageName: node
+  linkType: hard
+
 "dayjs@npm:~1.11.5":
   version: 1.11.9
   resolution: "dayjs@npm:1.11.9"
@@ -2960,7 +2967,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.18.2":
+"express-query-parser@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "express-query-parser@npm:1.3.3"
+  dependencies:
+    express: ^4.17.1
+  checksum: 2e067b34b584840a2f5ae63a7316bd909bf20475bca813af9e09cc3493269284f30433d0d02ad8ee445630677ea35419db72b0408fcfd7b475fc69c53f55cdf7
+  languageName: node
+  linkType: hard
+
+"express@npm:^4.17.1, express@npm:^4.18.2":
   version: 4.18.2
   resolution: "express@npm:4.18.2"
   dependencies:
@@ -6031,9 +6047,11 @@ __metadata:
     axios: ^1.3.6
     concurrently: ^7.6.0
     cors: ^2.8.5
+    dayjs: ^1.11.10
     dotenv: ^16.0.3
     eslint: ^8.38.0
     express: ^4.18.2
+    express-query-parser: ^1.3.3
     jsonwebtoken: ^9.0.0
     mongodb: ^5.6.0
     mongoose: ^7.0.3
