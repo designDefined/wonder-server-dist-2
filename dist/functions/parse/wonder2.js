@@ -13,12 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const creator_1 = __importDefault(require("./creator"));
-const status_1 = __importDefault(require("./status"));
-const summary = (db) => ({ id, title, genre, thumbnail, summary, schedule, location, creator, likedUsers, reservationProcess, }) => __awaiter(void 0, void 0, void 0, function* () {
-    const tag = {
-        genre,
-        status: (0, status_1.default)(schedule, !!reservationProcess),
-    };
+const summary = (db) => ({ id, title, genre, thumbnail, summary, schedule, location, creator, likedUsers, }) => __awaiter(void 0, void 0, void 0, function* () {
+    const tag = { genre, status: "reserveNow" };
     const creatorSchema = yield db
         .collection("creator")
         .findOne({ _id: creator });
@@ -38,10 +34,7 @@ const summary = (db) => ({ id, title, genre, thumbnail, summary, schedule, locat
     };
 });
 const display = (db) => ({ id, title, genre, thumbnail, summary, content, schedule, location, reservationProcess, creator, likedUsers, }) => __awaiter(void 0, void 0, void 0, function* () {
-    const tag = {
-        genre,
-        status: (0, status_1.default)(schedule, !!reservationProcess),
-    };
+    const tag = { genre, status: "reserveNow" };
     const creatorSchema = yield db
         .collection("creator")
         .findOne({ _id: creator });

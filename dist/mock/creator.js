@@ -1,0 +1,161 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mockCreators = void 0;
+const mongodb_1 = require("mongodb");
+const samples_1 = require("../functions/samples");
+const emptyObjectIdArray = [];
+const emptyNumberArray = [];
+exports.mockCreators = [
+    {
+        id: 0,
+        name: "와플스튜디오",
+        summary: "",
+        profileImage: samples_1.sampleImageURL.creator(),
+        dateInformation: {
+            createdAt: new Date("2023-01-01"),
+            lastModifiedAt: new Date("2023-01-01"),
+        },
+        instagram: "@wafflestudio",
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbeb9"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 1,
+        name: "Powerplant(문화예술원)",
+        summary: "문화의 시대를 새로이 준비하다",
+        profileImage: samples_1.sampleImageURL.creatorWithProfile(1),
+        dateInformation: {
+            createdAt: new Date("2023-07-05"),
+            lastModifiedAt: new Date("2023-07-05"),
+        },
+        instagram: "@powerplant.seoul",
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbeba"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 2,
+        name: "인문대학 학생회 <울림>",
+        summary: "인문대에서 울리는 새로운 소리, <울림>",
+        profileImage: samples_1.sampleImageURL.creatorWithProfile(2),
+        dateInformation: {
+            createdAt: new Date("2023-06-21"),
+            lastModifiedAt: new Date("2023-06-21"),
+        },
+        instagram: "@humanities_snu",
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbeba"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 3,
+        name: "언어학과 밴드 <기표와 기의>",
+        summary: "서울대학교 언어학과 밴드 <기표와 기의(Signifiant & Signifié)>",
+        profileImage: samples_1.sampleImageURL.creatorWithProfile(3),
+        dateInformation: {
+            createdAt: new Date("2023-06-21"),
+            lastModifiedAt: new Date("2023-06-21"),
+        },
+        instagram: "@band._.gigi",
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbeba"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 4,
+        name: "서울대학교 경영대학 학생회",
+        summary: "서울대학교 제100대 집행부입니다",
+        profileImage: samples_1.sampleImageURL.creator(),
+        dateInformation: {
+            createdAt: new Date("2023-06-21"),
+            lastModifiedAt: new Date("2023-06-21"),
+        },
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbebb"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 5,
+        name: "Reaction 댄스크루",
+        summary: "서울대학교 힙합댄스동아리 리액션크루",
+        profileImage: samples_1.sampleImageURL.creatorWithProfile(5),
+        dateInformation: {
+            createdAt: new Date("2023-06-21"),
+            lastModifiedAt: new Date("2023-06-21"),
+        },
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbebb"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 6,
+        name: "서울미대 극예술연구회",
+        summary: "안녕하세요? 서울대학교 미술대학 극예술연구회입니다!",
+        profileImage: samples_1.sampleImageURL.creator(),
+        dateInformation: {
+            createdAt: new Date("2023-03-10"),
+            lastModifiedAt: new Date("2023-06-21"),
+        },
+        instagram: "aerg.official",
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbebd"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 7,
+        name: "미술대학 학생회",
+        summary: "서울대학교 미술대학 학생회입니다.",
+        profileImage: samples_1.sampleImageURL.creator(),
+        dateInformation: {
+            createdAt: new Date("2023-01-20"),
+            lastModifiedAt: new Date("2023-01-20"),
+        },
+        instagram: "2023_snuart",
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbec1"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 8,
+        name: "향록연극회",
+        summary: "농업생명과학대학 유일무이 연극 동아리",
+        profileImage: samples_1.sampleImageURL.creator(),
+        dateInformation: {
+            createdAt: new Date("2023-04-11"),
+            lastModifiedAt: new Date("2023-04-11"),
+        },
+        instagram: "ever._.green1965",
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbebe"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 9,
+        name: "연합전공 정보문화학",
+        summary: "연합전공 정보문화학입니다.",
+        profileImage: samples_1.sampleImageURL.creator(),
+        dateInformation: {
+            createdAt: new Date("2023-02-08"),
+            lastModifiedAt: new Date("2023-02-08"),
+        },
+        instagram: "isc_snu",
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbebd"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+    {
+        id: 10,
+        name: "정오",
+        summary: "제63대 서울대학교 총학생회 정오",
+        profileImage: samples_1.sampleImageURL.creatorWithProfile(10),
+        dateInformation: {
+            createdAt: new Date("2023-02-10"),
+            lastModifiedAt: new Date("2023-02-10"),
+        },
+        instagram: "we_snu_63rd",
+        owner: new mongodb_1.ObjectId("65325fc318a1024d56acbebf"),
+        createdWonder: emptyObjectIdArray,
+        subscribedUsers: emptyNumberArray,
+    },
+];

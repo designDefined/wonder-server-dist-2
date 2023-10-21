@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const creator_1 = __importDefault(require("./creator"));
-const wonder_1 = __importDefault(require("./wonder"));
+const wonder2_1 = __importDefault(require("./wonder2"));
 const ramda_1 = require("ramda");
-const reservation_1 = __importDefault(require("./reservation"));
+const reservation2_1 = __importDefault(require("./reservation2"));
 const summary = ({ id, nickname, profileImage }) => ({
     id,
     nickname,
@@ -41,15 +41,15 @@ const display = (db) => ({ id, nickname, platformType, profileImage, name, phone
     const likedWonderSummaries = yield (0, ramda_1.pipe)((database) => database
         .collection("wonder")
         .find({ id: { $in: likedWonders } })
-        .toArray(), (0, ramda_1.andThen)((0, ramda_1.map)(wonder_1.default.summary(db))), (0, ramda_1.andThen)((data) => Promise.all(data)))(db);
+        .toArray(), (0, ramda_1.andThen)((0, ramda_1.map)(wonder2_1.default.summary(db))), (0, ramda_1.andThen)((data) => Promise.all(data)))(db);
     const reservedWondersForUser = yield (0, ramda_1.pipe)((database) => database
         .collection("reservation")
         .find({ _id: { $in: reservedWonders } })
-        .toArray(), (0, ramda_1.andThen)((0, ramda_1.map)(reservation_1.default.forUser(db))), (0, ramda_1.andThen)((data) => Promise.all(data)))(db);
+        .toArray(), (0, ramda_1.andThen)((0, ramda_1.map)(reservation2_1.default.forUser(db))), (0, ramda_1.andThen)((data) => Promise.all(data)))(db);
     const ticketBookForUser = yield (0, ramda_1.pipe)((database) => database
         .collection("reservation")
         .find({ _id: { $in: ticketBook } })
-        .toArray(), (0, ramda_1.andThen)((0, ramda_1.map)(reservation_1.default.forUser(db))), (0, ramda_1.andThen)((data) => Promise.all(data)))(db);
+        .toArray(), (0, ramda_1.andThen)((0, ramda_1.map)(reservation2_1.default.forUser(db))), (0, ramda_1.andThen)((data) => Promise.all(data)))(db);
     return {
         id,
         nickname,

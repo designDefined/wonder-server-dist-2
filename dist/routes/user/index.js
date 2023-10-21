@@ -25,6 +25,7 @@ const reservation_1 = require("../../functions/reservation");
 const wonder_1 = require("../../functions/wonder");
 const utility_1 = require("../../functions/utility");
 const token_1 = require("../../functions/auth/token");
+const wrapAsync_1 = __importDefault(require("../../errors/wrapAsync"));
 const router = (0, express_1.Router)();
 // router.post(
 //   "/login",
@@ -36,42 +37,31 @@ const router = (0, express_1.Router)();
 //     cutData("_id"),
 //   ),
 // );
-router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        //check db
-        const database = (0, connect_1.default)();
-        if (!database)
-            throw new Error("DB");
-        // get data
-        const query = req.query;
-        const { email } = req.body;
-        if (!email)
-            throw new Error("email is required");
-        if (query.type === "test") {
-            const data = yield database.collection("user").findOne({
+router.post("/login", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0, void 0, void 0, function* () {
+    // get data
+    const query = req.query;
+    const { email } = req.body;
+    if (!email)
+        throw new Error("email is required");
+    if (query.type === "test") {
+        const data = yield db.collection("user").findOne({
+            email,
+        }, { projection: { _id: 1 } });
+        if (data) {
+            res.status(200).json({
+                needLogin: false,
+                token: (0, token_1.signToken)({ type: "user", _id: data._id }),
+            });
+        }
+        else {
+            res.status(200).json({
+                needLogin: true,
                 email,
-            }, { projection: { _id: 1 } });
-            if (data) {
-                res.status(200).json({
-                    needLogin: false,
-                    token: (0, token_1.signToken)({ type: "user", _id: data._id }),
-                });
-                return;
-            }
-            else {
-                res.status(200).json({
-                    needLogin: true,
-                    email,
-                    type: query.type,
-                });
-                return;
-            }
+                type: query.type,
+            });
         }
     }
-    catch (e) {
-        res.status(500).json({ error: e });
-    }
-}));
+})));
 /*
 router.post(
   "/testLogin",

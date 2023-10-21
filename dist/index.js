@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -30,17 +7,14 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const index_1 = __importDefault(require("./routes/index"));
-const connect_1 = __importStar(require("./db/connect"));
+const connect_1 = require("./db/connect");
 const wonder_1 = __importDefault(require("./routes/wonder"));
 const user_1 = __importDefault(require("./routes/user"));
 const creator_1 = __importDefault(require("./routes/creator"));
-const express_2 = __importDefault(require("./libs/flow/express"));
-const flow_1 = require("./libs/flow");
-const mongodb_1 = require("./libs/flow/mongodb");
 const uniqueId_1 = require("./functions/uniqueId");
-const auth_1 = require("./functions/auth");
 const express_query_parser_1 = require("express-query-parser");
 const me_1 = __importDefault(require("./routes/user/me"));
+const middleware_1 = __importDefault(require("./errors/middleware"));
 /*** basics ***/
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -68,13 +42,11 @@ app.use("/user", user_1.default);
 app.use("/user/me", me_1.default);
 app.use("/wonder", wonder_1.default);
 app.use("/creator", creator_1.default);
-app.get("/newScenario/:wonder_id", (0, express_2.default)((0, flow_1.extractRequest)({
-    params: ["wonder_id"],
-    query: [],
-    headers: auth_1.emptyHeader,
-}), (0, flow_1.parseContextToInt)("wonder_id"), (0, flow_1.setContext)((f) => Promise.resolve({ id: f.context.wonder_id }))("filter"), (0, flow_1.setData)((f) => (0, mongodb_1.dbFindOne)("wonder")({ id: f.context.wonder_id })((0, connect_1.default)())), (0, flow_1.cutData)("_id"), flow_1.promptFlow));
+/*** error handling ***/
+app.use(middleware_1.default);
 /*** open server ***/
 app.listen(port, () => {
+    1;
     console.log(`[server]: Server is running at http://localhost:${port !== null && port !== void 0 ? port : "invalid port"}`);
 });
 /*
@@ -84,6 +56,7 @@ import {
 } from "passport-naver-v2";
 import axios from "axios";
 import { User } from "./model/user";
+import errorMapperMiddleware from './middlewares/errorMapper';
 */
 /*
 passport.use(
