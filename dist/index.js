@@ -11,6 +11,7 @@ const connect_1 = require("./db/connect");
 const wonder_1 = __importDefault(require("./routes/wonder"));
 const user_1 = __importDefault(require("./routes/user"));
 const creator_1 = __importDefault(require("./routes/creator"));
+const reservation_1 = __importDefault(require("./routes/reservation"));
 const uniqueId_1 = require("./functions/uniqueId");
 const express_query_parser_1 = require("express-query-parser");
 const me_1 = __importDefault(require("./routes/user/me"));
@@ -42,6 +43,7 @@ app.use("/user", user_1.default);
 app.use("/user/me", me_1.default);
 app.use("/wonder", wonder_1.default);
 app.use("/creator", creator_1.default);
+app.use("/reservation", reservation_1.default);
 /*** error handling ***/
 app.use(middleware_1.default);
 /*** open server ***/
