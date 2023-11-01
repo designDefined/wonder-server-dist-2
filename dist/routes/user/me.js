@@ -18,6 +18,7 @@ const wrapAsync_1 = __importDefault(require("../../errors/wrapAsync"));
 const type_1 = require("../../functions/auth/type");
 const user_1 = __importDefault(require("../../functions/parse/user"));
 const mongodb_1 = require("mongodb");
+const zod_1 = require("zod");
 const router = (0, express_1.Router)();
 router.get("/", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0, void 0, void 0, function* () {
     // parse token
@@ -38,5 +39,41 @@ router.get("/detail", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 
         throw new Error("User not found");
     const userDisplay = yield user_1.default.display(db)(user);
     res.status(200).json(userDisplay);
+})));
+const PutNameBody = zod_1.z.object({
+    name: zod_1.z.string().max(15),
+});
+router.put("/name", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0, void 0, void 0, function* () {
+    // parse token
+    const _id = new mongodb_1.ObjectId(type_1.UserToken.parse((0, token_1.verifyToken)(type_1.AuthHeader.parse(req.headers).authorization))._id);
+    // find user
+    const user = yield db.collection("user").findOne({ _id });
+    if (!user)
+        throw new Error("User not found");
+    const { name } = PutNameBody.parse(req.body);
+    const updateUserResult = yield db.collection("user").updateOne({ _id }, {
+        $set: { name },
+    });
+    if (!updateUserResult.acknowledged)
+        throw new Error("User update failed");
+    res.status(200).json({ name });
+})));
+const PutPhoneBody = zod_1.z.object({
+    phoneNumber: zod_1.z.string().max(15),
+});
+router.put("/phone", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0, void 0, void 0, function* () {
+    // parse token
+    const _id = new mongodb_1.ObjectId(type_1.UserToken.parse((0, token_1.verifyToken)(type_1.AuthHeader.parse(req.headers).authorization))._id);
+    // find user
+    const user = yield db.collection("user").findOne({ _id });
+    if (!user)
+        throw new Error("User not found");
+    const { phoneNumber } = PutPhoneBody.parse(req.body);
+    const updateUserResult = yield db.collection("user").updateOne({ _id }, {
+        $set: { phoneNumber },
+    });
+    if (!updateUserResult.acknowledged)
+        throw new Error("User update failed");
+    res.status(200).json({ name });
 })));
 exports.default = router;

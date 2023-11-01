@@ -22,8 +22,33 @@ router.get("/health", (0, express_2.default)((0, flow_1.setData)(() => true)));
 router.get("/ping", (0, express_2.default)((0, flow_1.setData)(() => ({ message: "pong" }))));
 router.post("/echo", (0, express_2.default)((0, flow_1.extractBodyLenient)(), (0, flow_1.setData)((f) => f.context.body)));
 router.post("/dbinsert", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0, void 0, void 0, function* () {
+    const results = yield Promise.resolve([]);
     // const result = await db.collection("wonder").insertMany(mockWonders);
-    res.status(500).json({ error_message: "no api assigned" });
-    // res.status(200).json({ result });
+    // const wonders = await db
+    //   .collection<WonderSchema>("wonder")
+    //   .find()
+    //   .toArray();
+    // const creators = await db
+    //   .collection<CreatorSchema>("creator")
+    //   .find()
+    //   .toArray();
+    // for (const creator of creators) {
+    //   const result = await db.collection<CreatorSchema>("creator").updateOne(
+    //     { id: creator.id },
+    //     {
+    //       $set: {
+    //         createdWonder: wonders
+    //           .filter((wonder) => {
+    //             const creatorObjectId = new ObjectId(wonder.creator);
+    //             return creatorObjectId.equals(creator._id);
+    //           })
+    //           .map((wonder) => wonder.id),
+    //       },
+    //     },
+    //   );
+    //   results.push(result);
+    // }
+    // res.status(500).json({ error_message: "no api assigned" });
+    res.status(200).json({ results });
 })));
 exports.default = router;

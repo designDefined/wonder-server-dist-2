@@ -16,19 +16,19 @@ const creator_1 = __importDefault(require("./creator"));
 const wonder_1 = __importDefault(require("./wonder"));
 const ramda_1 = require("ramda");
 const reservation_1 = __importDefault(require("./reservation"));
-const summary = ({ id, nickname, profileImage }) => ({
+const summary = ({ id, name, profileImage }) => ({
     id,
-    nickname,
+    name,
     profileImage,
 });
-const mySummary = (db) => ({ id, nickname, profileImage, ownedCreators, }) => __awaiter(void 0, void 0, void 0, function* () {
+const mySummary = (db) => ({ id, name, profileImage, ownedCreators, }) => __awaiter(void 0, void 0, void 0, function* () {
     const ownedCreatorSummaries = (yield db
         .collection("creator")
         .find({ _id: { $in: ownedCreators } })
         .toArray()).map(creator_1.default.summary);
     return {
         id,
-        nickname,
+        name,
         profileImage,
         ownedCreators: ownedCreatorSummaries,
     };

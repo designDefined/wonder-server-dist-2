@@ -25,10 +25,11 @@ const GetListQuery = zod_1.z.object({
     filter: zod_1.z.record(zod_1.z.unknown()).optional().default({}),
     text: zod_1.z.record(zod_1.z.unknown()).optional(),
     sort: zod_1.z.enum(["like", "created"]).optional().default("created"),
+    status: zod_1.z.enum(["now", "reserveNow"]).optional(),
 });
 router.get("/list", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0, void 0, void 0, function* () {
     // find wonder
-    const { filter, text, sort } = GetListQuery.parse(req.query);
+    const { filter, text, sort, status } = GetListQuery.parse(req.query);
     const data = yield db
         .collection("wonder")
         .aggregate([
@@ -38,6 +39,11 @@ router.get("/list", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0,
     ])
         .toArray();
     const wonderSummaries = yield Promise.all(data.map(wonder_1.default.summary(db)));
+    if (status) {
+        const filteredWonder = wonderSummaries.filter((wonder) => wonder.tag.status === status);
+        res.status(200).json(filteredWonder);
+        return;
+    }
     res.status(200).json(wonderSummaries);
 })));
 const GetDetailParams = zod_1.z.object({
