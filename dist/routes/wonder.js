@@ -20,7 +20,11 @@ const sortWonder_1 = __importDefault(require("../functions/aggregation/sortWonde
 const mongodb_1 = require("mongodb");
 const token_1 = require("../functions/auth/token");
 const type_1 = require("../functions/auth/type");
+const wonder_2 = require("../functions/create/wonder");
 const router = (0, express_1.Router)();
+/**
+ * GET "/wonder/list"
+ */
 const GetListQuery = zod_1.z.object({
     filter: zod_1.z.record(zod_1.z.unknown()).optional().default({}),
     text: zod_1.z.record(zod_1.z.unknown()).optional(),
@@ -49,6 +53,9 @@ router.get("/list", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0,
 const GetDetailParams = zod_1.z.object({
     id: zod_1.z.coerce.number(),
 });
+/**
+ * GET "/wonder/detail/:id"
+ */
 router.get("/detail/:id", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0, void 0, void 0, function* () {
     // find wonder
     const { id } = GetDetailParams.parse(req.params);
@@ -60,6 +67,9 @@ router.get("/detail/:id", (0, wrapAsync_1.default)((req, res, db) => __awaiter(v
     const wonderDisplay = yield wonder_1.default.display(db)(data);
     res.status(200).json(wonderDisplay);
 })));
+/**
+ * POST "/wonder/like/:id"
+ */
 const PostLikeQuery = zod_1.z.object({
     is: zod_1.z.boolean(),
 });
@@ -91,5 +101,29 @@ router.post("/like/:id", (0, wrapAsync_1.default)((req, res, db) => __awaiter(vo
     if (updateUserResult.modifiedCount !== 1)
         throw new Error("User update failed");
     res.status(200).json({ message: "success" });
+})));
+router.post("/new", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0, void 0, void 0, function* () {
+    // parse token
+    const userObjectId = new mongodb_1.ObjectId(type_1.UserToken.parse((0, token_1.verifyToken)(type_1.AuthHeader.parse(req.headers).authorization))._id);
+    // find user
+    const user = yield db
+        .collection("user")
+        .findOne({ _id: userObjectId });
+    if (!user)
+        throw new Error("User not found");
+    const data = req.body;
+    const wonder = (0, wonder_2.createWonder)(data, user.ownedCreators[0]);
+    const insertResult = yield db.collection("wonder").insertOne(wonder);
+    if (!insertResult.acknowledged)
+        throw new Error("Creator insert failed");
+    // update creator
+    const updateResult = yield db
+        .collection("creator")
+        .updateOne({ _id: user.ownedCreators[0] }, {
+        $push: { createdWonder: insertResult.insertedId },
+    });
+    if (!updateResult.acknowledged)
+        throw new Error("User update failed");
+    res.status(200).json({ wonderId: wonder.id });
 })));
 exports.default = router;
