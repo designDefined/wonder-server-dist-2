@@ -121,7 +121,7 @@ router.post("/new", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0,
     const updateResult = yield db
         .collection("creator")
         .updateOne({ id: creatorId }, {
-        $push: { createdWonder: insertResult.insertedId },
+        $push: { createdWonder: wonder.id },
     });
     if (!updateResult.acknowledged)
         throw new Error("User update failed");
