@@ -111,7 +111,8 @@ router.post("/new", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0,
         .findOne({ _id: userObjectId });
     if (!user)
         throw new Error("User not found");
-    const data = req.body;
+    // parse request
+    const { data, creatorId } = req.body;
     const wonder = (0, wonder_2.createWonder)(data, user.ownedCreators[0]);
     const insertResult = yield db.collection("wonder").insertOne(wonder);
     if (!insertResult.acknowledged)
@@ -119,11 +120,52 @@ router.post("/new", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0,
     // update creator
     const updateResult = yield db
         .collection("creator")
-        .updateOne({ _id: user.ownedCreators[0] }, {
+        .updateOne({ id: creatorId }, {
         $push: { createdWonder: insertResult.insertedId },
     });
     if (!updateResult.acknowledged)
         throw new Error("User update failed");
     res.status(200).json({ wonderId: wonder.id });
-})));
+})), router.put("/:wonderId/modify", (0, wrapAsync_1.default)((req, res, db) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    // parse token
+    const userObjectId = new mongodb_1.ObjectId(type_1.UserToken.parse((0, token_1.verifyToken)(type_1.AuthHeader.parse(req.headers).authorization))._id);
+    // find user
+    const user = yield db
+        .collection("user")
+        .findOne({ _id: userObjectId });
+    if (!user)
+        throw new Error("User not found");
+    // parse request
+    const { data, creatorId } = req.body;
+    const creator = yield db.collection("creator").findOne({
+        id: creatorId,
+    });
+    if (!creator)
+        throw new Error("Creator not found");
+    const isMine = creator.owner.equals((_a = user === null || user === void 0 ? void 0 : user._id) !== null && _a !== void 0 ? _a : "");
+    if (!isMine)
+        throw new Error("Not your creator");
+    // update wonder
+    const updateResult = yield db
+        .collection("wonder")
+        .updateOne({ id: Number(req.params.wonderId) }, {
+        $set: {
+            title: data.title,
+            summary: data.summary,
+            content: data.content,
+            genre: data.genre,
+            thumbnail: data.thumbnail,
+            schedule: data.schedule,
+            location: data.location,
+            reservationProcess: data.reservationProcess,
+        },
+    });
+    if (!updateResult.acknowledged) {
+        throw new Error("Update failed");
+    }
+    res.status(200).json({
+        success: true,
+    });
+}))));
 exports.default = router;
